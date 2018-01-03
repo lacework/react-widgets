@@ -47,7 +47,7 @@ export default React.createClass({
   },
 
   render(){
-    let { disabled, readOnly } = this.props
+    let { disabled, readOnly, title } = this.props
     let { textValue } = this.state
 
     let props = _.omitOwnProps(this);
@@ -63,6 +63,7 @@ export default React.createClass({
         onBlur={this.handleBlur}
         onKeyDown={this.handleKeyDown}
         size={textValue.length}
+        title={title}
       />
     )
   },

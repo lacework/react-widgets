@@ -10,6 +10,7 @@ class Input extends React.Component {
       , value
       , tabIndex
       , component: Component = 'input'
+        , title
       , ...props
     } = this.props;
 
@@ -21,6 +22,7 @@ class Input extends React.Component {
         autoComplete='off'
         disabled={disabled}
         readOnly={readOnly}
+        title={title}
         aria-disabled={disabled}
         aria-readonly={readOnly}
         value={value == null ? '' : value}
