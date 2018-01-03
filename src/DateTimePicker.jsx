@@ -152,6 +152,7 @@ var DateTimePicker = React.createClass({
       , readOnly
       , name
       , tabIndex
+        , title
       , autoFocus
       , 'aria-labelledby': ariaLabelledby
       , 'aria-describedby': ariaDescribedby } = this.props;
@@ -176,6 +177,7 @@ var DateTimePicker = React.createClass({
         culture={culture}
         parse={this._parse}
         onChange={this.handleChange}
+        title={title}
         aria-haspopup
         aria-labelledby={ariaLabelledby}
         aria-describedby={ariaDescribedby}
@@ -304,6 +306,7 @@ var DateTimePicker = React.createClass({
       , messages
       , disabled
       , readOnly
+        , title
       , dropUp} = this.props;
 
     let { focused } = this.state;
@@ -323,6 +326,7 @@ var DateTimePicker = React.createClass({
     return (
       <Widget
         {...elementProps}
+          title={title}
         open={!!open}
         dropUp={dropUp}
         focused={focused}
