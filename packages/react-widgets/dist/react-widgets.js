@@ -11735,7 +11735,9 @@ var DateTimePickerInput = (_temp = _class = function (_React$Component) {
       disabled: disabled,
       readOnly: readOnly,
       onChange: this.handleChange,
-      onBlur: this.handleBlur
+      onBlur: this.handleBlur,
+      onKeyDown: this.handleKeyDown,
+      size: textValue.length
     }));
   };
 
@@ -11783,6 +11785,16 @@ var DateTimePickerInput = (_temp = _class = function (_React$Component) {
 
       _this2._needsFlush = false;
       onChange(date, formatDate(date, format, culture));
+    }
+  };
+
+  this.handleKeyDown = function (event) {
+    if (event.key == 'Enter') {
+      var date = _this2.props.parse(event.target.value);
+      (0, _reactDom.findDOMNode)(_this2).blur();
+      _this2.props.onChange(date, formatDate(date, _this2.props.format, _this2.props.culture));
+    } else if (event.key == 'Escape') {
+      (0, _reactDom.findDOMNode)(_this2).blur();
     }
   };
 }, _temp);
@@ -11997,6 +12009,10 @@ var TimeList = (_temp = _class = function (_React$Component) {
     var start = values.min;
     var startDay = _dates2.default.date(start);
 
+    if (props.offsetMinutes) {
+      start = _dates2.default.add(start, props.offsetMinutes, 'minutes');
+    }
+
     while (_dates2.default.date(start) === startDay && _dates2.default.lte(start, values.max)) {
       times.push({
         date: start,
@@ -12058,7 +12074,7 @@ var TimeList = (_temp = _class = function (_React$Component) {
   min: _propTypes2.default.instanceOf(Date),
   max: _propTypes2.default.instanceOf(Date),
   currentDate: _propTypes2.default.instanceOf(Date),
-
+  offsetMinutes: _propTypes2.default.number,
   itemComponent: CustomPropTypes.elementType,
   format: CustomPropTypes.dateFormat,
   onSelect: _propTypes2.default.func,
