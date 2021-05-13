@@ -12,13 +12,16 @@ npm run build
 
 Bump the version number. This uses the preid format so we have an obvious link to the source docs and code if neede
 ```
-npm version prerelease --preid fork.<next version here> --no-git-tag-version
+npm version prerelease --no-git-tag-version
 ```
 
 Publish 
 ```
 npm publish --access public --tag latest
 ```
+
+Commit and push changes to package-lock.json and package.json
+
 
 [![NPM version][npm-image]][npm-url]
 [![Downloads][downloads-image]][downloads-url]
