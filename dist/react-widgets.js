@@ -7133,7 +7133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _VIEW, _OPPOSITE_DIRECTION, _MULTIPLIER, _desc, _value, _obj; //values, omit
+	var _VIEW, _OPPOSITE_DIRECTION, _MULTIPLIER, _desc, _value2, _obj; //values, omit
 
 
 	var _propTypes = __webpack_require__(20);
@@ -7217,6 +7217,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
 	  var desc = {};
@@ -7517,8 +7519,97 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    this.navigate(dir.DOWN, date);
+	  },
+	  changeCurrentDate: function changeCurrentDate(date) {
+	    var currentDate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.props.currentDate;
+
+	    var inRangeDate = this.inRangeValue(date ? new Date(date) : currentDate);
+	    if (_dates2.default.eq(inRangeDate, dateOrNull(currentDate), VIEW_UNIT[this.state.view])) return;
+	    (0, _widgetHelpers.notify)(this.props.onCurrentDateChange, inRangeDate);
+	  },
+	  select: function select(date) {
+	    var view = this.props.initialView,
+	        slideDir = view !== this.state.view || _dates2.default.gt(date, this.state.currentDate) ? 'left' // move down to a the view
+	    : 'right';
+
+	    (0, _widgetHelpers.notify)(this.props.onChange, date);
+
+	    if (this.isValidView(view) && _dates2.default.inRange(date, this.props.min, this.props.max, view)) {
+	      this.focus();
+
+	      this.changeCurrentDate(date);
+
+	      this.setState({
+	        slideDirection: slideDir,
+	        view: view
+	      });
+	    }
+	  },
+	  nextDate: function nextDate(direction) {
+	    var method = direction === dir.LEFT ? 'subtract' : 'add',
+	        view = this.state.view,
+	        unit = view === views.MONTH ? view : views.YEAR,
+	        multi = MULTIPLIER[view] || 1;
+
+	    return _dates2.default[method](this.props.currentDate, 1 * multi, unit);
+	  },
+	  handleKeyDown: function handleKeyDown(e) {
+	    var ctrl = e.ctrlKey,
+	        key = e.key,
+	        direction = ARROWS_TO_DIRECTION[key],
+	        current = this.props.currentDate,
+	        view = this.state.view,
+	        unit = VIEW_UNIT[view],
+	        currentDate = current;
+
+	    if (key === 'Enter') {
+	      e.preventDefault();
+	      return this.change(current);
+	    }
+
+	    if (direction) {
+	      if (ctrl) {
+	        e.preventDefault();
+	        this.navigate(direction);
+	      } else {
+	        if (this.isRtl() && OPPOSITE_DIRECTION[direction]) direction = OPPOSITE_DIRECTION[direction];
+
+	        currentDate = _dates2.default.move(currentDate, this.props.min, this.props.max, view, direction);
+
+	        if (!_dates2.default.eq(current, currentDate, unit)) {
+	          e.preventDefault();
+
+	          if (_dates2.default.gt(currentDate, current, view)) this.navigate(dir.RIGHT, currentDate);else if (_dates2.default.lt(currentDate, current, view)) this.navigate(dir.LEFT, currentDate);else this.changeCurrentDate(currentDate);
+	        }
+	      }
+	    }
+
+	    (0, _widgetHelpers.notify)(this.props.onKeyDown, [e]);
+	  },
+	  _label: function _label() {
+	    var _props2 = this.props,
+	        culture = _props2.culture,
+	        props = _objectWithoutProperties(_props2, ['culture']),
+	        view = this.state.view,
+	        dt = this.props.currentDate;
+
+	    if (view === 'month') return _localizers.date.format(dt, format(props, 'header'), culture);else if (view === 'year') return _localizers.date.format(dt, format(props, 'year'), culture);else if (view === 'decade') return _localizers.date.format(_dates2.default.startOf(dt, 'decade'), format(props, 'decade'), culture);else if (view === 'century') return _localizers.date.format(_dates2.default.startOf(dt, 'century'), format(props, 'century'), culture);
+	  },
+	  inRangeValue: function inRangeValue(_value) {
+	    var value = dateOrNull(_value);
+
+	    if (value === null) return value;
+
+	    return _dates2.default.max(_dates2.default.min(value, this.props.max), this.props.min);
+	  },
+	  isValidView: function isValidView(next) {
+	    var bottom = VIEW_OPTIONS.indexOf(this.props.initialView),
+	        top = VIEW_OPTIONS.indexOf(this.props.finalView),
+	        current = VIEW_OPTIONS.indexOf(next);
+
+	    return current >= bottom && current <= top;
 	  }
-	}, (_applyDecoratedDescriptor(_obj, 'navigate', [_interaction.widgetEditable], Object.getOwnPropertyDescriptor(_obj, 'navigate'), _obj), _applyDecoratedDescriptor(_obj, 'change', [_interaction.widgetEditable], Object.getOwnPropertyDescriptor(_obj, 'change'), _obj)), _obj));
+	}, (_applyDecoratedDescriptor(_obj, 'navigate', [_interaction.widgetEditable], Object.getOwnPropertyDescriptor(_obj, 'navigate'), _obj), _applyDecoratedDescriptor(_obj, 'change', [_interaction.widgetEditable], Object.getOwnPropertyDescriptor(_obj, 'change'), _obj), _applyDecoratedDescriptor(_obj, 'select', [_interaction.widgetEditable], Object.getOwnPropertyDescriptor(_obj, 'select'), _obj), _applyDecoratedDescriptor(_obj, 'handleKeyDown', [_interaction.widgetEditable], Object.getOwnPropertyDescriptor(_obj, 'handleKeyDown'), _obj)), _obj));
 
 	function dateOrNull(dt) {
 	  if (dt && !isNaN(dt.getTime())) return dt;
