@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import  React from 'react';
 
 export default {
 
   contextTypes: {
-    isRtl: React.PropTypes.bool
+    isRtl: PropTypes.bool
   },
 
   isRtl() {

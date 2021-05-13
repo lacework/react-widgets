@@ -4,27 +4,25 @@ import { date as dateLocalizer } from './util/localizers';
 
 var format = props => dateLocalizer.getFormat('footer', props.format)
 
-module.exports = React.createClass({
+module.exports = class extends React.Component {
+  static displayName = 'Footer';
 
-    displayName: 'Footer',
+  render() {
+    let { disabled, readOnly, value } = this.props;
 
-    render() {
-      let { disabled, readOnly, value } = this.props;
-
-      return (
-        <div className='rw-footer'>
-          <Button
-            disabled={!!(disabled || readOnly)}
-            onClick={this.props.onClick.bind(null, value)}
-          >
-            {dateLocalizer.format(
-              value,
-              format(this.props),
-              this.props.culture
-            )}
-          </Button>
-        </div>
-      );
-    }
-
-});
+    return (
+      <div className='rw-footer'>
+        <Button
+          disabled={!!(disabled || readOnly)}
+          onClick={this.props.onClick.bind(null, value)}
+        >
+          {dateLocalizer.format(
+            value,
+            format(this.props),
+            this.props.culture
+          )}
+        </Button>
+      </div>
+    );
+  }
+};

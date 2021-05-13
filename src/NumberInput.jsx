@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import _  from './util/_';
 import CustomPropTypes from './util/propTypes';
@@ -6,35 +7,31 @@ import { number as numberLocalizer } from './util/localizers';
 let getFormat = props => numberLocalizer.getFormat('default', props.format)
 
 let propTypes = {
-  value:       React.PropTypes.number,
-  editing:     React.PropTypes.bool,
-  placeholder: React.PropTypes.string,
+  value:       PropTypes.number,
+  editing:     PropTypes.bool,
+  placeholder: PropTypes.string,
 
   format:      CustomPropTypes.numberFormat,
 
-  parse:       React.PropTypes.func,
-  culture:     React.PropTypes.string,
+  parse:       PropTypes.func,
+  culture:     PropTypes.string,
 
-  min:         React.PropTypes.number,
+  min:         PropTypes.number,
 
-  onChange:    React.PropTypes.func.isRequired,
-  onKeyDown:   React.PropTypes.func
+  onChange:    PropTypes.func.isRequired,
+  onKeyDown:   PropTypes.func
 };
 
-export default React.createClass({
+export default class extends React.Component {
+  static displayName = 'NumberPickerInput';
+  static propTypes = propTypes;
 
-  displayName: 'NumberPickerInput',
+  static defaultProps = {
+    value: null,
+    editing: false
+  };
 
-  propTypes,
-
-  getDefaultProps() {
-    return {
-      value: null,
-      editing: false
-    }
-  },
-
-  getDefaultState(props = this.props){
+  getDefaultState = (props = this.props) => {
     var value = props.value
       , decimal = numberLocalizer.decimalChar(null, props.culture)
       , format = getFormat(props);
@@ -49,18 +46,14 @@ export default React.createClass({
     return {
       stringValue: '' + value
     }
-  },
-
-  getInitialState() {
-    return this.getDefaultState()
-  },
+  };
 
   componentWillReceiveProps(nextProps) {
     this.setState(
       this.getDefaultState(nextProps))
-  },
+  }
 
-  render(){
+  render() {
     let value = this.state.stringValue;
     let props = _.omitOwnProps(this);
 
@@ -79,9 +72,9 @@ export default React.createClass({
         value={value}
       />
     )
-  },
+  }
 
-  _change(e) {
+  _change = (e) => {
     var val = e.target.value
       , number = this._parse(e.target.value)
 
@@ -100,9 +93,9 @@ export default React.createClass({
     else {
       this.current(e.target.value)
     }
-  },
+  };
 
-  _finish() {
+  _finish = () => {
     var str = this.state.stringValue
       , number = this._parse(str);
 
@@ -114,9 +107,9 @@ export default React.createClass({
       }
       this.props.onChange(number)
     }
-  },
+  };
 
-  _parse(strVal) {
+  _parse = (strVal) => {
     let culture = this.props.culture
       , delimChar = numberLocalizer.decimalChar(null, culture)
       , userParse = this.props.parse;
@@ -128,22 +121,22 @@ export default React.createClass({
     strVal = parseFloat(strVal);
 
     return strVal
-  },
+  };
 
-  isIntermediateValue(num, str) {
+  isIntermediateValue = (num, str) => {
     return !!(
       num < this.props.min ||
       this.isSign(str) ||
       this.isAtDelimiter(num, str) ||
       this.isPaddedZeros(str)
     );
-  },
+  };
 
-  isSign(val) {
+  isSign = (val) => {
     return (val || '').trim() === '-';
-  },
+  };
 
-  isPaddedZeros(str) {
+  isPaddedZeros = (str) => {
     let localeChar = numberLocalizer.decimalChar(null, this.props.culture)
     let [_, decimals] = str.split(localeChar);
 
@@ -151,9 +144,9 @@ export default React.createClass({
       decimals &&
       decimals.match(/0+$/)
     )
-  },
+  };
 
-  isAtDelimiter(num, str, props = this.props) {
+  isAtDelimiter = (num, str, props = this.props) => {
     var localeChar = numberLocalizer.decimalChar(null, props.culture)
       , lastIndex = str.length - 1
       , char;
@@ -166,17 +159,18 @@ export default React.createClass({
       char === localeChar &&
       str.indexOf(char) === lastIndex
     )
-  },
+  };
 
-  isValid(num) {
+  isValid = (num) => {
     if (typeof num !== 'number' || isNaN(num))
       return false
     return num >= this.props.min
-  },
+  };
 
   //this intermediate state is for when one runs into the decimal or are typing the number
-  current(stringValue) {
+  current = (stringValue) => {
     this.setState({ stringValue })
-  }
+  };
 
-});
+  state = this.getDefaultState();
+}

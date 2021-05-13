@@ -1,4 +1,5 @@
 'use strict';
+import PropTypes from 'prop-types';
 import React  from 'react';
 import filters from '../util/filter';
 import CustomPropTypes from '../util/propTypes';
@@ -9,11 +10,11 @@ var dflt = f => f === true ? 'startsWith' : f ? f : 'eq'
 module.exports = {
 
     propTypes: {
-      data:           React.PropTypes.array,
-      value:          React.PropTypes.any,
+      data:           PropTypes.array,
+      value:          PropTypes.any,
       filter:         CustomPropTypes.filter,
-      caseSensitive:  React.PropTypes.bool,
-      minLength:      React.PropTypes.number
+      caseSensitive:  PropTypes.bool,
+      minLength:      PropTypes.number
     },
 
     getDefaultProps(){

@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import React   from 'react';
+import createReactClass from 'create-react-class';
 import ListOption from './ListOption';
 import CustomPropTypes from './util/propTypes';
 import compat from './util/compat';
@@ -10,7 +12,7 @@ import { isDisabledItem, isReadOnlyItem }  from './util/interaction';
 
 let optionId = (id, idx)=> `${id}__option__${idx}`;
 
-export default React.createClass({
+export default createReactClass({
 
   displayName: 'List',
 
@@ -20,22 +22,22 @@ export default React.createClass({
   ],
 
   propTypes: {
-    data:          React.PropTypes.array,
-    onSelect:      React.PropTypes.func,
-    onMove:        React.PropTypes.func,
+    data:          PropTypes.array,
+    onSelect:      PropTypes.func,
+    onMove:        PropTypes.func,
 
     optionComponent: CustomPropTypes.elementType,
     itemComponent:   CustomPropTypes.elementType,
 
-    selected:      React.PropTypes.any,
-    focused:       React.PropTypes.any,
+    selected:      PropTypes.any,
+    focused:       PropTypes.any,
     valueField:    CustomPropTypes.accessor,
     textField:     CustomPropTypes.accessor,
 
     disabled:      CustomPropTypes.disabled.acceptsArray,
     readOnly:      CustomPropTypes.readOnly.acceptsArray,
 
-    messages:      React.PropTypes.shape({
+    messages:      PropTypes.shape({
       emptyList:   CustomPropTypes.message
     })
   },
@@ -141,4 +143,4 @@ export default React.createClass({
     notify(this.props.onMove, [ selected, list, this.props.focused ])
   }
 
-})
+});

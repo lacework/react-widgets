@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import _  from './util/_';
@@ -7,20 +8,32 @@ import compat from './util/compat';
 import { date as dateLocalizer } from './util/localizers';
 import CustomPropTypes from './util/propTypes';
 
-export default React.createClass({
+export default class extends React.Component {
+  static displayName = 'DateTimePickerInput';
 
-  displayName: 'DateTimePickerInput',
-
-  propTypes: {
+  static propTypes = {
     format: CustomPropTypes.dateFormat.isRequired,
-    editing: React.PropTypes.bool,
+    editing: PropTypes.bool,
     editFormat: CustomPropTypes.dateFormat,
-    parse: React.PropTypes.func.isRequired,
+    parse: PropTypes.func.isRequired,
 
-    value: React.PropTypes.instanceOf(Date),
-    onChange: React.PropTypes.func.isRequired,
-    culture: React.PropTypes.string
-  },
+    value: PropTypes.instanceOf(Date),
+    onChange: PropTypes.func.isRequired,
+    culture: PropTypes.string
+  };
+
+  constructor(props) {
+    super(props);
+    let { value, editing, editFormat, format, culture } = props;
+
+    this.state = {
+      textValue: formatDate(
+          value
+        , editing && editFormat ? editFormat : format
+        , culture
+      )
+    };
+  }
 
   componentWillReceiveProps(nextProps) {
     let { value, editing, editFormat, format, culture } = nextProps;
@@ -32,21 +45,9 @@ export default React.createClass({
         , culture
       )
     })
-  },
+  }
 
-  getInitialState() {
-    let { value, editing, editFormat, format, culture } = this.props;
-
-    return {
-      textValue: formatDate(
-          value
-        , editing && editFormat ? editFormat : format
-        , culture
-      )
-    }
-  },
-
-  render(){
+  render() {
     let { disabled, readOnly } = this.props
     let { textValue } = this.state
 
@@ -65,9 +66,9 @@ export default React.createClass({
         size={textValue.length}
       />
     )
-  },
+  }
 
-  handleKeyDown(event) {
+  handleKeyDown = (event) => {
     if(event.key == 'Enter') {
       let date = this.props.parse(event.target.value);
       compat.findDOMNode(this).blur();
@@ -75,14 +76,14 @@ export default React.createClass({
     } else if(event.key == 'Escape') {
       compat.findDOMNode(this).blur();
     }
-  },
+  };
 
-  handleChange({ target: { value } }) {
+  handleChange = ({ target: { value } }) => {
     this._needsFlush = true
     this.setState({ textValue: value });
-  },
+  };
 
-  handleBlur(event) {
+  handleBlur = (event) => {
     let { format, culture, parse, onChange, onBlur } = this.props;
 
     onBlur && onBlur(event)
@@ -93,12 +94,12 @@ export default React.createClass({
       this._needsFlush = false
       onChange(date, formatDate(date, format, culture))
     }
-  },
+  };
 
-  focus(){
+  focus = () => {
     compat.findDOMNode(this).focus()
-  }
-});
+  };
+}
 
 function isValid(d) {
   return !isNaN(d.getTime());

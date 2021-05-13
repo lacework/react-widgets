@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
 export default {
   propTypes: {
-    autoFocus: React.PropTypes.bool
+    autoFocus: PropTypes.bool
   },
 
   componentDidMount() {

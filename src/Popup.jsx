@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { cloneElement } from 'react';
 import _ from './util/_';
 import css from 'dom-helpers/style';
@@ -30,45 +31,39 @@ let OVERFLOW = {
 }
 
 let propTypes = {
-  open:           React.PropTypes.bool,
-  dropUp:         React.PropTypes.bool,
-  duration:       React.PropTypes.number,
+  open:           PropTypes.bool,
+  dropUp:         PropTypes.bool,
+  duration:       PropTypes.number,
 
-  onClosing:      React.PropTypes.func,
-  onOpening:      React.PropTypes.func,
-  onClose:        React.PropTypes.func,
-  onOpen:         React.PropTypes.func
+  onClosing:      PropTypes.func,
+  onOpening:      PropTypes.func,
+  onClose:        PropTypes.func,
+  onOpen:         PropTypes.func
 }
 
-export default React.createClass({
+export default class extends React.Component {
+  static displayName = 'Popup';
+  static propTypes = propTypes;
 
-  displayName: 'Popup',
+  static defaultProps = {
+    duration:    200,
+    open:        false,
+    onClosing:   function(){},
+    onOpening:   function(){},
+    onClose:     function(){},
+    onOpen:      function(){}
+  };
 
-  propTypes,
-
-  getInitialState() {
-    return {
-      initialRender: true,
-      status: this.props.open ? OPENING : CLOSED
-    }
-  },
-
-  getDefaultProps(){
-    return {
-      duration:    200,
-      open:        false,
-      onClosing:   function(){},
-      onOpening:   function(){},
-      onClose:     function(){},
-      onOpen:      function(){}
-    }
-  },
+  state = {
+    initialRender: true,
+    status: this.props.open ? OPENING : CLOSED
+  };
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       contentChanged: childKey(nextProps.children) !== childKey(this.props.children)
     })
-  },
+  }
 
   componentDidMount() {
     let isOpen = this.state.status === OPENING;
@@ -79,9 +74,9 @@ export default React.createClass({
         this.open();
       }
     })
-  },
+  }
 
-  componentDidUpdate(pvProps){
+  componentDidUpdate(pvProps) {
     var closing =  pvProps.open && !this.props.open
       , opening = !pvProps.open && this.props.open
       , open    = this.props.open
@@ -107,7 +102,7 @@ export default React.createClass({
       if (isNaN(diff) || diff > 0.1)
         this.setState({ height });
     }
-  },
+  }
 
   render() {
     var { className, dropUp, style } = this.props
@@ -133,9 +128,9 @@ export default React.createClass({
         { this.renderChildren() }
       </div>
     )
-  },
+  }
 
-  renderChildren() {
+  renderChildren = () => {
     if (!this.props.children)
       return <span className='rw-popup rw-widget' />
 
@@ -150,9 +145,9 @@ export default React.createClass({
       },
       className: cn(child.props.className, 'rw-popup rw-widget')
     });
-  },
+  };
 
-  open() {
+  open = () => {
     this.cancelNextCallback()
     var el = compat.findDOMNode(this).firstChild
       , height = this.height();
@@ -169,9 +164,9 @@ export default React.createClass({
         })
       })
     })
-  },
+  };
 
-  close() {
+  close = () => {
     this.cancelNextCallback()
     var el = compat.findDOMNode(this).firstChild
       , height = this.height();
@@ -188,9 +183,9 @@ export default React.createClass({
         })
       )
     })
-  },
+  };
 
-  getOffsetForStatus(status) {
+  getOffsetForStatus = (status) => {
     if (this.state.initialRender)
       return {}
 
@@ -202,9 +197,9 @@ export default React.createClass({
       [OPENING]: _in,
       [OPEN]: out
     }[status] || {}
-  },
+  };
 
-  height() {
+  height = () => {
     var container = compat.findDOMNode(this)
       , content = container.firstChild
       , margin = parseInt(css(content, 'margin-top'), 10)
@@ -217,19 +212,19 @@ export default React.createClass({
     height = (getHeight(content) || 0) + (isNaN(margin) ? 0 : margin)
     container.style.display = old
     return height
-  },
+  };
 
-  isTransitioning() {
+  isTransitioning = () => {
     return this.state.status === OPENING
         || this.state.status === CLOSED
-  },
+  };
 
-  animate(el, props, dur, easing, cb) {
+  animate = (el, props, dur, easing, cb) => {
     this._transition =
       config.animate(el, props, dur, easing, this.setNextCallback(cb))
-  },
+  };
 
-  cancelNextCallback() {
+  cancelNextCallback = () => {
     if (this._transition && this._transition.cancel) {
       this._transition.cancel()
       this._transition = null
@@ -238,13 +233,13 @@ export default React.createClass({
       this.nextCallback.cancel();
       this.nextCallback = null;
     }
-  },
+  };
 
-  safeSetState(nextState, callback) {
+  safeSetState = (nextState, callback) => {
     this.setState(nextState, this.setNextCallback(callback));
-  },
+  };
 
-  setNextCallback(callback) {
+  setNextCallback = (callback) => {
     let active = true;
 
     this.nextCallback = (event) => {
@@ -257,9 +252,8 @@ export default React.createClass({
 
     this.nextCallback.cancel = () => active = false;
     return this.nextCallback;
-  }
-
-})
+  };
+}
 
 
 function childKey(children){
