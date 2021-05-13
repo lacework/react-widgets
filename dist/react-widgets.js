@@ -9283,6 +9283,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //pick, omit, has
 
+	var _react = __webpack_require__(29);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _propTypes = __webpack_require__(20);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -9508,7 +9512,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var focused = this.state.focused;
 
 
-	    return React.createElement(_DateTimePickerInput2.default, {
+	    return _react2.default.createElement(_DateTimePickerInput2.default, {
 	      id: id,
 	      ref: 'valueInput',
 	      role: 'combobox',
@@ -9545,17 +9549,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return null;
 	    }
 
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'span',
 	      { className: 'rw-select' },
-	      calendar && React.createElement(_Button2.default, {
+	      calendar && _react2.default.createElement(_Button2.default, {
 	        icon: 'calendar',
 	        className: 'rw-btn-calendar',
 	        label: messages.calendarButton,
 	        disabled: !!(disabled || readOnly),
 	        onClick: this._click.bind(null, _constants.datePopups.CALENDAR)
 	      }),
-	      time && React.createElement(_Button2.default, {
+	      time && _react2.default.createElement(_Button2.default, {
 	        icon: 'clock-o',
 	        className: 'rw-btn-time',
 	        label: messages.timeButton,
@@ -9576,7 +9580,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var calendarProps = _3.default.pickProps(this.props, Calendar);
 
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      _Popup2.default,
 	      {
 	        dropUp: dropUp,
@@ -9584,7 +9588,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        open: open === _constants.datePopups.CALENDAR,
 	        className: 'rw-calendar-popup'
 	      },
-	      React.createElement(Calendar, _extends({}, calendarProps, {
+	      _react2.default.createElement(Calendar, _extends({}, calendarProps, {
 	        ref: 'calPopup',
 	        id: id,
 	        tabIndex: '-1',
@@ -9620,7 +9624,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var timeListProps = _3.default.pickProps(this.props, _TimeList2.default);
 
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      _Popup2.default,
 	      {
 	        dropUp: dropUp,
@@ -9630,10 +9634,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _this2.refs.timePopup.forceUpdate();
 	        }
 	      },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        null,
-	        React.createElement(_TimeList2.default, _extends({}, timeListProps, {
+	        _react2.default.createElement(_TimeList2.default, _extends({}, timeListProps, {
 	          ref: 'timePopup',
 	          id: id,
 	          format: timeFormat,
@@ -9675,7 +9679,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (calendar) owns += dateListID;
 	    if (time) owns += ' ' + timeListID;
 
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      _Widget2.default,
 	      _extends({}, elementProps, {
 	        open: !!open,
