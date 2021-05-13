@@ -1,4 +1,4 @@
-react-widgets
+react-widgets - Forked from 3.4.5
 =============
 
 [![NPM version][npm-image]][npm-url]

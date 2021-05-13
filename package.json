@@ -1,5 +1,5 @@
 {
-  "name": "react-widgets",
+  "name": "@lacework/react-widgets-fork",
   "version": "3.4.5",
   "description": "An à la carte set of polished, extensible, and accessible inputs built for React",
   "main": "lib/index.js",
@@ -56,11 +56,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jquense/react-widgets"
+    "url": "https://github.com/lacework/react-widgets"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0",
-    "react-dom": "^0.14.0 || ^15.0.0"
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "dependencies": {
     "classnames": "^2.1.2",
