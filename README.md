@@ -1,5 +1,24 @@
-react-widgets - Forked from 3.4.5
+Lacework fork of react-widgets@3.4.5
 =============
+
+# Releasing
+This could be a single script in package.json, but I figured being explicit is better to catch issues. And we will 
+probably never release another version.
+
+Build for production
+```
+npm run build
+```
+
+Bump the version number. This uses the preid format so we have an obvious link to the source docs and code if neede
+```
+npm version prerelease --preid fork.<next version here> --no-git-tag-version
+```
+
+Publish 
+```
+npm publish --access public --tag latest
+```
 
 [![NPM version][npm-image]][npm-url]
 [![Downloads][downloads-image]][downloads-url]

@@ -47,10 +47,7 @@
     "build:dist": "npm run clean:dist && npm run compile:dist & npm run compile:locale && npm run less && npm run assets:dist",
     "build": "npm run build:lib && npm run build:dist",
     "docs": "npm run clean:docs && webpack-dev-server --config ./build/docs.config.js --hot",
-    "dev": "webpack-dev-server --config ./build/dev.config.js --hot",
-    "release": "release",
-    "alpha": "release --preid alpha --tag next",
-    "beta": "release --preid beta --tag next"
+    "dev": "webpack-dev-server --config ./build/dev.config.js --hot"
   },
   "homepage": "http://jquense.github.io/react-widgets/docs/",
   "license": "MIT",
