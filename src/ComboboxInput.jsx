@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import _  from './util/_';
 import caretPos from './util/caret';
@@ -5,15 +6,18 @@ import compat from './util/compat';
 
 import Input from './Input';
 
-export default React.createClass({
+export default class extends React.Component {
+  static displayName = 'ComboboxInput';
 
-  displayName: 'ComboboxInput',
+  static propTypes = {
+    value: PropTypes.string,
+    suggest: PropTypes.bool,
+    onChange: PropTypes.func.isRequired
+  };
 
-  propTypes: {
-    value: React.PropTypes.string,
-    suggest: React.PropTypes.bool,
-    onChange: React.PropTypes.func.isRequired
-  },
+  static defaultProps = {
+    value: ''
+  };
 
   componentDidUpdate() {
     var input = compat.findDOMNode(this)
@@ -27,13 +31,7 @@ export default React.createClass({
         caretPos(input, start, start + end)
       }
     }
-  },
-
-  getDefaultProps(){
-    return {
-      value: ''
-    }
-  },
+  }
 
   render() {
     let { onKeyDown, ...props } = this.props;
@@ -47,25 +45,25 @@ export default React.createClass({
         onChange={this.handleChange}
       />
     )
-  },
+  }
 
-  isSuggesting() {
+  isSuggesting = () => {
     var val = this.props.value
       , isSuggestion = this._last != null
           && val.toLowerCase().indexOf(this._last.toLowerCase()) !== -1;
 
     return this.props.suggest && isSuggestion
-  },
+  };
 
-  accept(removeCaret) {
+  accept = (removeCaret) => {
     var val = compat.findDOMNode(this).value || ''
       , end = val.length;
 
     this._last = null
     removeCaret && caretPos(compat.findDOMNode(this), end, end)
-  },
+  };
 
-  handleChange(e) {
+  handleChange = (e) => {
     var val = e.target.value
       , pl = !!this.props.placeholder
 
@@ -76,9 +74,9 @@ export default React.createClass({
 
     this._last = val;
     this.props.onChange(e, val)
-  },
+  };
 
-  focus() {
+  focus = () => {
     compat.findDOMNode(this).focus()
-  }
-});
+  };
+}

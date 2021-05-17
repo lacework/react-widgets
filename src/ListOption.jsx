@@ -1,15 +1,16 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import cn from 'classnames';
 import _  from './util/_';
 
-let ListOption = React.createClass({
-  propTypes: {
-    dataItem: React.PropTypes.any,
-    focused:  React.PropTypes.bool,
-    selected: React.PropTypes.bool,
-    disabled: React.PropTypes.bool,
-    readOnly: React.PropTypes.bool
-  },
+class ListOption extends React.Component {
+  static propTypes = {
+    dataItem: PropTypes.any,
+    focused:  PropTypes.bool,
+    selected: PropTypes.bool,
+    disabled: PropTypes.bool,
+    readOnly: PropTypes.bool
+  };
 
   render() {
     let { className, children, focused, selected, disabled, readOnly } = this.props;
@@ -35,6 +36,6 @@ let ListOption = React.createClass({
       </li>
     );
   }
-});
+}
 
 export default ListOption;

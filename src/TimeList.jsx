@@ -1,5 +1,7 @@
 
+import PropTypes from 'prop-types';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import dates from './util/dates';
 import List from './List';
 import { date as dateLocalizer } from './util/localizers';
@@ -8,24 +10,24 @@ import _ from './util/_';
 
 var format = props => dateLocalizer.getFormat('time', props.format)
 
-export default React.createClass({
+export default createReactClass({
 
   displayName: 'TimeList',
 
   propTypes: {
-    value: React.PropTypes.instanceOf(Date),
-    step: React.PropTypes.number,
-    min: React.PropTypes.instanceOf(Date),
-    max: React.PropTypes.instanceOf(Date),
-    currentDate: React.PropTypes.instanceOf(Date),
-    offsetMinutes: React.PropTypes.number,
+    value: PropTypes.instanceOf(Date),
+    step: PropTypes.number,
+    min: PropTypes.instanceOf(Date),
+    max: PropTypes.instanceOf(Date),
+    currentDate: PropTypes.instanceOf(Date),
+    offsetMinutes: PropTypes.number,
 
     itemComponent: CustomPropTypes.elementType,
     format: CustomPropTypes.dateFormat,
-    onSelect: React.PropTypes.func,
-    preserveDate: React.PropTypes.bool,
-    culture: React.PropTypes.string,
-    delay: React.PropTypes.number
+    onSelect: PropTypes.func,
+    preserveDate: PropTypes.bool,
+    culture: PropTypes.string,
+    delay: PropTypes.number
   },
 
   mixins: [

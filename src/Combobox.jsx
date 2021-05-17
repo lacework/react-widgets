@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import cn from 'classnames';
 import _  from './util/_';
 import filter from './util/filter';
@@ -25,10 +27,10 @@ let propTypes = {
   ...Popup.propTypes,
 
   //-- controlled props -----------
-  value:          React.PropTypes.any,
-  onChange:       React.PropTypes.func,
-  open:           React.PropTypes.bool,
-  onToggle:       React.PropTypes.func,
+  value:          PropTypes.any,
+  onChange:       PropTypes.func,
+  open:           PropTypes.bool,
+  onToggle:       PropTypes.func,
   //------------------------------------
 
   itemComponent:  CustomPropTypes.elementType,
@@ -37,36 +39,36 @@ let propTypes = {
   groupComponent: CustomPropTypes.elementType,
   groupBy:        CustomPropTypes.accessor,
 
-  data:           React.PropTypes.array,
-  valueField:     React.PropTypes.string,
+  data:           PropTypes.array,
+  valueField:     PropTypes.string,
   textField:      CustomPropTypes.accessor,
-  name:           React.PropTypes.string,
+  name:           PropTypes.string,
 
-  onSelect:       React.PropTypes.func,
+  onSelect:       PropTypes.func,
 
-  autoFocus:      React.PropTypes.bool,
+  autoFocus:      PropTypes.bool,
   disabled:       CustomPropTypes.disabled.acceptsArray,
   readOnly:       CustomPropTypes.readOnly.acceptsArray,
 
   suggest:        CustomPropTypes.filter,
   filter:         CustomPropTypes.filter,
 
-  busy:           React.PropTypes.bool,
+  busy:           PropTypes.bool,
 
-  dropUp:         React.PropTypes.bool,
-  duration:       React.PropTypes.number,
-  delay:          React.PropTypes.number,
+  dropUp:         PropTypes.bool,
+  duration:       PropTypes.number,
+  delay:          PropTypes.number,
 
-  placeholder:    React.PropTypes.string,
+  placeholder:    PropTypes.string,
 
-  messages:       React.PropTypes.shape({
+  messages:       PropTypes.shape({
     open:         CustomPropTypes.message,
     emptyList:    CustomPropTypes.message,
     emptyFilter:  CustomPropTypes.message
   })
 };
 
-var ComboBox = React.createClass({
+var ComboBox = createReactClass({
 
   displayName: 'ComboBox',
 
@@ -298,153 +300,6 @@ var ComboBox = React.createClass({
     notify(this.props.onSelect, data)
     this.change(data)
     this.focus();
-  },
-
-  handleInputKeyDown(e){
-    this._deleting = e.key === 'Backspace' || e.key === 'Delete'
-    this._isTyping = true
-  },
-
-  handleInputChange(e){
-    let { data, textField } = this.props
-
-    var shouldSuggest = !!this.props.suggest
-      , strVal  = e.target.value
-      , suggestion;
-
-    suggestion = this._deleting || !shouldSuggest
-      ? strVal : this.suggest(this._data(), strVal)
-
-    suggestion = suggestion || strVal
-
-    data = _.find(data,
-      item => dataText(item, textField).toLowerCase() === suggestion.toLowerCase())
-
-    this.change(!this._deleting && data
-      ? data
-      : strVal, true)
-
-    this.open()
-  },
-
-  focus() {
-    this.refs.input &&
-      this.refs.input.focus()
-  },
-
-  @widgetEditable
-  handleKeyDown(e){
-    var self = this
-      , key  = e.key
-      , alt  = e.altKey
-      , list = this.refs.list
-      , focusedItem = this.state.focusedItem
-      , selectedItem = this.state.selectedItem
-      , isOpen = this.props.open;
-
-    notify(this.props.onKeyDown, [e])
-    if (e.defaultPrevented)
-      return
-
-    if (key === 'End')
-      if ( isOpen ) this.setState({ focusedItem: list.last() })
-      else          select(list.last(), true)
-
-    else if (key === 'Home')
-      if (isOpen) this.setState({ focusedItem: list.first() })
-      else          select(list.first(), true)
-
-    else if (key === 'Escape' && isOpen)
-      this.close()
-
-    else if (key === 'Enter' && isOpen) {
-      e.preventDefault();
-      select(this.state.focusedItem, true)
-    }
-    else if (key === 'ArrowDown') {
-      if ( alt )
-        this.open()
-      else {
-        if ( isOpen ) this.setState({ focusedItem: list.next(focusedItem) })
-        else          select(list.next(selectedItem), true)
-      }
-    }
-    else if ( key === 'ArrowUp' ) {
-      if ( alt )
-        this.close()
-      else {
-        if ( isOpen ) this.setState({ focusedItem: list.prev(focusedItem) })
-        else          select(list.prev(selectedItem), true)
-      }
-    }
-
-    function select(item, fromList) {
-      if(!item)
-        return self.change(compat.findDOMNode(self.refs.input).value, false)
-
-      self.refs.input.accept(true); //removes caret
-
-      if(fromList)
-        return self.handleSelect(item)
-
-      self.change(item, false)
-    }
-  },
-
-  change(data, typing){
-    this._typedChange = !!typing
-    notify(this.props.onChange, data)
-  },
-
-  open(){
-    if ( !this.props.open )
-      notify(this.props.onToggle, true)
-  },
-
-  close(){
-    if ( this.props.open )
-      notify(this.props.onToggle, false)
-  },
-
-  @widgetEditable
-  toggle(){
-    this.focus()
-
-    this.props.open
-      ? this.close()
-      : this.open()
-  },
-
-  suggest(data, value) {
-    let { textField, suggest, minLength } = this.props
-
-    var word = dataText(value, textField)
-      , suggestion;
-
-    suggest = defaultSuggest(suggest)
-
-    if (!(word || '').trim() || word.length < (minLength || 1))
-      return ''
-
-    suggestion = typeof value === 'string'
-        ? _.find(data, getFilter(suggest, word, textField))
-        : value
-
-    if ( suggestion && (!this.state || !this.state.deleting))
-      return dataText(suggestion, textField)
-
-    return ''
-  },
-
-  _data() {
-    return this.state.processedData
-  },
-
-  process(data, values, searchTerm) {
-    if (this.props.filter && searchTerm)
-      data = this.filter(data, searchTerm)
-
-    return data
   }
 })
 

@@ -1,10 +1,11 @@
 'use strict';
+import PropTypes from 'prop-types';
 import React from 'react';
 import compat from '../util/compat'
 
-let shape = React.PropTypes.shape({
+let shape = PropTypes.shape({
   //setActive: React.PropTypes.func,
-  reconcile: React.PropTypes.func
+  reconcile: PropTypes.func
 });
 
 function defaultReconcile(key, id) {
@@ -30,7 +31,7 @@ export default function(nodeOrComponent, reconcileChildren = defaultReconcile){
 
   return {
     propTypes: {
-      ariaActiveDescendantKey: React.PropTypes.string.isRequired
+      ariaActiveDescendantKey: PropTypes.string.isRequired
     },
 
     contextTypes: {
@@ -68,5 +69,5 @@ export default function(nodeOrComponent, reconcileChildren = defaultReconcile){
         }
       })
     }
-  }
+  };
 }
